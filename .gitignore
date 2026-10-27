@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+*.rdb
+*.aof
+.DS_Store
+Thumbs.db
+.claude/worktrees/
+.claude/settings.local.json
+CLAUDE.local.md
