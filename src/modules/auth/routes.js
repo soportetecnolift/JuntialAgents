@@ -7,6 +7,8 @@ import { requireAuth } from '../../middleware/auth.js';
 import { audit } from '../../lib/audit.js';
 import { env } from '../../config/env.js';
 import { center } from '../../lib/center.js';
+import { redis } from '../../lib/redis.js';
+import { randomToken, sha256 } from '../../lib/crypto.js';
 import * as S from './service.js';
 import { startUrl, finish, ensureTenant } from './sso.js';
 
@@ -28,10 +30,28 @@ r.get('/sso/callback', asyncH(async (req, res) => {
   if (req.query.error) return back({ error: req.query.error_description || req.query.error });
   try {
     const { user, next } = await finish({ code: String(req.query.code || ''), state: String(req.query.state || '') });
+    const pub = env.PUBLIC_API_URL.replace(/\/$/, ''); const auth = (env.AUTH_API_URL || env.PUBLIC_API_URL).replace(/\/$/, '');
+    if (auth !== pub) {
+      // El panel usa otra dirección (p. ej. localhost mientras la pública es un túnel): la sesión se abre allí,
+      // con un pase de un solo uso y 60 s de vida, para que la cookie quede en el mismo sitio que el panel.
+      const ticket = randomToken(32);
+      await redis.set(`sso:ticket:${sha256(ticket)}`, JSON.stringify({ userId: String(user._id), next }), 'EX', 60);
+      return res.redirect(302, `${auth}/api/auth/sso/finish?t=${encodeURIComponent(ticket)}`);
+    }
     const s = await S.createSession(user, { ...meta(req), method: 'sso' });
     res.cookie(S.REFRESH_COOKIE, s.refreshToken, S.cookieOpts(s.expiresAt));
     res.redirect(302, `${env.WEB_URL.replace(/\/$/, '')}${next || '/'}`);
   } catch (e) { back({ error: e.message }); }
+}));
+// Segunda mitad del login cuando el panel usa una dirección distinta de la pública (ver sso/callback)
+r.get('/sso/finish', asyncH(async (req, res) => {
+  const back = (q) => res.redirect(302, `${env.WEB_URL.replace(/\/$/, '')}/login?${new URLSearchParams(q)}`);
+  const d = JSON.parse((await redis.getdel(`sso:ticket:${sha256(String(req.query.t || ''))}`)) || 'null');
+  if (!d) return back({ error: 'El inicio de sesión caducó o ya se usó. Vuelve a intentarlo.' });
+  const user = await User.findById(d.userId); if (!user) return back({ error: 'Usuario no encontrado' });
+  const s = await S.createSession(user, { ...meta(req), method: 'sso' });
+  res.cookie(S.REFRESH_COOKIE, s.refreshToken, S.cookieOpts(s.expiresAt));
+  res.redirect(302, `${env.WEB_URL.replace(/\/$/, '')}${d.next || '/'}`);
 }));
 
 r.post('/refresh', asyncH(async (req, res) => {

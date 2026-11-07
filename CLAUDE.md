@@ -34,6 +34,7 @@ Las pruebas usan una base simulada (`test/helpers/fakedb.mjs`), una IA simulada,
 6. Cada cambio de comportamiento lleva su prueba. `npm test` en verde antes de terminar.
 
 ## Cosas aprendidas (no repetir)
+- Si la dirección pública (`PUBLIC_API_URL`, p. ej. un túnel) no es la que usa el panel (`AUTH_API_URL`), el login vuelve a la pública y abre la sesión en la del panel con un pase de un solo uso (`/api/auth/sso/finish`): la cookie tiene que quedar en el mismo sitio que el panel.
 - `categorize()` (riesgo de cada herramienta) mira **todos** los tokens del nombre: `executeCOQLQuery` es lectura.
 - Si dos tareas del mismo empleado coinciden, la segunda **espera su turno** (reintento cada 30 s, hasta 2 h); nunca se pierde. Ojo con los `return` sin `await` dentro de un `try`.
 - El aviso del empleado es corto (`<aviso>`) y el detalle va aparte (`<detalle>`, solo en el panel).

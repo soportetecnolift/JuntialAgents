@@ -5,6 +5,9 @@ const schema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().default(4000),
   PUBLIC_API_URL: z.string().url(),
+  // Dirección con la que el PANEL habla con esta API (p. ej. http://localhost:4000 mientras PUBLIC_API_URL es un túnel).
+  // El login termina ahí para que la cookie de sesión quede en el mismo sitio que el panel. Vacío = PUBLIC_API_URL.
+  AUTH_API_URL: z.string().url().optional(),
   WEB_URL: z.string().url(),
   CORS_ORIGINS: z.string().default(''),
   MONGO_URI: z.string().min(1),
