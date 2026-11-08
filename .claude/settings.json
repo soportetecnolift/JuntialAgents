@@ -16,7 +16,11 @@
       "Bash(git commit:*)",
       "Bash(git push origin feat/*)",
       "Bash(git push origin fix/*)",
-      "Bash(git push origin docs/*)"
+      "Bash(git push origin docs/*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr list:*)"
     ],
     "deny": [
       "Read(./.env)",
@@ -26,7 +30,9 @@
       "Bash(git push --force*)",
       "Bash(git push -f*)",
       "Bash(git reset --hard*)",
-      "Bash(npm publish*)"
+      "Bash(npm publish*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh repo delete:*)"
     ]
   }
 }
