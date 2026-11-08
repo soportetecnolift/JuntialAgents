@@ -12,3 +12,6 @@ Thumbs.db
 .claude/worktrees/
 .claude/settings.local.json
 CLAUDE.local.md
+
+# Copias del proyecto descomprimidas por error dentro de sí mismo
+/juntial-agents-bk/

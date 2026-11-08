@@ -12,6 +12,8 @@ export const CENTER_SECRET = 'secreto-de-agents-para-pruebas';
 
 export function setupEnv(port, extra = {}) {
   Object.assign(process.env, {
+    // Las pruebas NUNCA leen el .env de quien las ejecuta: su configuración es solo la de aquí
+    DOTENV_CONFIG_PATH: 'test/.env.no-existe',
     NODE_ENV: 'test', LOG_LEVEL: 'silent', PORT: String(port),
     PUBLIC_API_URL: `http://127.0.0.1:${port}`, WEB_URL: 'http://panel.test', CORS_ORIGINS: 'http://panel.test',
     MONGO_URI: 'mongodb://simulada', REDIS_URL,

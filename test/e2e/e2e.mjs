@@ -6,7 +6,7 @@ import path from 'node:path';
 const AG = path.resolve(process.env.AGENTS_DIR || '.'); const CENTER = path.resolve(process.env.CENTER_DIR || '../juntial-center-bk');
 const hex = () => crypto.randomBytes(12).toString('hex');
 const ids = { ORG: hex(), ANA: hex(), ANA_M: hex(), PEPE_U: hex(), PEPE_M: hex(), OPS: hex() };
-Object.assign(process.env, { NODE_ENV: 'test', LOG_LEVEL: 'silent', PORT: '7410', PUBLIC_API_URL: 'http://127.0.0.1:7410', WEB_URL: 'http://agents.test', CORS_ORIGINS: 'http://agents.test', MONGO_URI: 'mongodb://simulada', REDIS_URL: process.env.TEST_REDIS_URL || "redis://127.0.0.1:6379/14",
+Object.assign(process.env, { DOTENV_CONFIG_PATH: 'test/.env.no-existe', NODE_ENV: 'test', LOG_LEVEL: 'silent', PORT: '7410', PUBLIC_API_URL: 'http://127.0.0.1:7410', WEB_URL: 'http://agents.test', CORS_ORIGINS: 'http://agents.test', MONGO_URI: 'mongodb://simulada', REDIS_URL: process.env.TEST_REDIS_URL || "redis://127.0.0.1:6379/14",
   ENCRYPTION_KEY: Buffer.alloc(32, 7).toString('base64'), JWT_ACCESS_SECRET: 'a'.repeat(40), JWT_REFRESH_SECRET: 'b'.repeat(40), ANTHROPIC_BASE_URL: 'http://127.0.0.1:7411', TELEGRAM_API_BASE: 'http://127.0.0.1:7412',
   CENTER_URL: 'http://127.0.0.1:7400', CENTER_WEB_URL: 'http://center.test', CENTER_APP_ID: 'juntialagents', CENTER_APP_SECRET: 'secreto-compartido-e2e-1234' });
 const child = fork(new URL('./center-child.mjs', import.meta.url), { env: { ...process.env, CENTER_DIR: CENTER, E2E_IDS: JSON.stringify(ids) }, stdio: ['ignore', 'inherit', 'inherit', 'ipc'] });
