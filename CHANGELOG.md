@@ -6,6 +6,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) · Versione
 ### Añadido
 - Documentación de arquitectura, operación y proceso de cambios (`docs/`), límites de Claude Code (`.claude/settings.json`) y plantilla de *pull request*.
 - Permisos de Claude Code para `gh`: puede abrir, ver y listar *pull requests* y consultar sus comprobaciones (`gh pr create/view/checks/list`); tiene prohibido fusionarlos (`gh pr merge`) y borrar repositorios (`gh repo delete`).
+- `.gitattributes`: todo el texto se normaliza a finales de línea LF (`* text=auto eol=lf`), también al descargarlo en Windows; las imágenes se marcan como binarias.
 
 ## [1.0.0] - 2026-10-27
 ### Añadido
