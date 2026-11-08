@@ -1,6 +1,6 @@
 // Proceso de Juntial Center REAL para la prueba entre servicios (base simulada en memoria con datos iniciales).
 const CENTER = (await import('node:path')).resolve(process.env.CENTER_DIR);
-Object.assign(process.env, { NODE_ENV: 'test', LOG_LEVEL: 'silent', PORT: '7400', PUBLIC_API_URL: 'http://127.0.0.1:7400', WEB_URL: 'http://center.test', MONGO_URI: 'mongodb://simulada',
+Object.assign(process.env, { DOTENV_CONFIG_PATH: 'test/.env.no-existe', NODE_ENV: 'test', LOG_LEVEL: 'silent', PORT: '7400', PUBLIC_API_URL: 'http://127.0.0.1:7400', WEB_URL: 'http://center.test', MONGO_URI: 'mongodb://simulada',
   ENCRYPTION_KEY: Buffer.alloc(32, 5).toString('base64'), JWT_ACCESS_SECRET: 'c'.repeat(40), JWT_REFRESH_SECRET: 'd'.repeat(40), CENTER_APPS: 'juntialagents:secreto-compartido-e2e-1234:http://127.0.0.1:7410:http://agents.test' });
 const M = await import(`${CENTER}/src/models/index.js`); const { Kv } = await import(`${CENTER}/src/lib/redis.js`);
 const { installFakeDb, oid } = await import(`${CENTER}/test/helpers/fakedb.mjs`);

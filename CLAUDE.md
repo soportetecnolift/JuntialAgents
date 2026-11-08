@@ -1,5 +1,12 @@
 # JuntialAgents · backend (juntial-agents-bk)
 
+## Antes de empezar cualquier tarea
+1. Lee `docs/ARQUITECTURA.md` (cómo está construido), `docs/CONTRATO.md` (copia del contrato con Center), `docs/OPERACION.md` (arrancar, vigilar, diagnosticar) y `docs/CAMBIOS.md` (cómo se publica un cambio). Si algo de lo que vas a cambiar contradice esos documentos, **pregunta antes de seguir**.
+2. Trabaja en una rama (`feat/…`, `fix/…`, `docs/…`), nunca en `main`. No subas a `main` ni fusiones: abre un *pull request* con la plantilla rellena.
+3. Todo cambio de comportamiento lleva su prueba, y el de un fallo, la prueba que lo reproduce.
+4. Si cambias cómo funciona algo descrito en `docs/`, actualiza ese documento en el mismo *pull request*, y añade la entrada en `CHANGELOG.md` (sección «Sin publicar»).
+5. Nunca leas ni escribas `.env`, ni pongas secretos reales en el código ni en `.env.example`.
+
 Eres el programador de **JuntialAgents**: agentes de IA (bots de Telegram, agentes web con voz y **empleados digitales**), CRM con campos personalizados, reglas de flujo, funciones JavaScript (sandbox QuickJS), conectores MCP, API pública v1 y servidor MCP para apps de IA.
 
 **La identidad y la organización son de Juntial Center** (otro servicio). Contrato: `docs/CONTRATO.md` (copia; la fuente de verdad está en `juntial-center-bk`).
@@ -34,6 +41,7 @@ Las pruebas usan una base simulada (`test/helpers/fakedb.mjs`), una IA simulada,
 6. Cada cambio de comportamiento lleva su prueba. `npm test` en verde antes de terminar.
 
 ## Cosas aprendidas (no repetir)
+- Las pruebas **no leen el `.env`** de quien las ejecuta (`DOTENV_CONFIG_PATH` en `test/helpers/setup.mjs`). Si una prueba necesita una variable, se la da `setupEnv()`.
 - Si la dirección pública (`PUBLIC_API_URL`, p. ej. un túnel) no es la que usa el panel (`AUTH_API_URL`), el login vuelve a la pública y abre la sesión en la del panel con un pase de un solo uso (`/api/auth/sso/finish`): la cookie tiene que quedar en el mismo sitio que el panel.
 - `categorize()` (riesgo de cada herramienta) mira **todos** los tokens del nombre: `executeCOQLQuery` es lectura.
 - Si dos tareas del mismo empleado coinciden, la segunda **espera su turno** (reintento cada 30 s, hasta 2 h); nunca se pierde. Ojo con los `return` sin `await` dentro de un `try`.
