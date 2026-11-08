@@ -1,0 +1,15 @@
+# Todo el texto se guarda y se descarga con finales de línea LF,
+# sea cual sea el sistema (y aunque core.autocrlf esté activado en Windows).
+* text=auto eol=lf
+
+# Imágenes: binarias, sin conversión de finales de línea ni diff de texto.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.avif binary
+*.bmp  binary
+*.ico  binary
+*.tif  binary
+*.tiff binary
